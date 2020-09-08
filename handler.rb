@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 require 'active_support/all'
 require 'open-uri'
@@ -23,30 +25,31 @@ weathers = json[:YDF][:Feature][:Property][:WeatherList][:Weather]
 
 logger.info(spot)
 heavy_rains = []
-weathers.each { |w|
+weathers.each do |w|
   logger.info("#{w[:Date]}: #{w[:Rainfall]}")
   rate = w[:Rainfall].to_f
   datetime = Time.parse(w[:Date])
-  next rate <= 0
-  heavy_rains << { rate: rate, datetime: datetime }
-}
 
-heavy_rains.each { |heavy_rain|
+  next if rate <= 0
+
+  heavy_rains << { rate: rate, datetime: datetime }
+end
+
+heavy_rains.each do |heavy_rain|
   logger.info(heavy_rain.to_json)
-}
+end
 
 if heavy_rains.empty?
   logger.info('heavy_rains is empty')
   return
 end
 
-# テスト通知
 uri = URI.parse(ENV['SLACK_WEBHOOK_URL'])
 params = {
-  channel: '#notify-weather',
-  username: 'webhookbot',
+  channel: '#' + ENV['SLACK_CHANNEL'],
+  username: 'rain_cloud',
   text: 'テスト',
-  icon_emoji: 'ghost',
+  icon_emoji: 'ghost'
 }
 headers = { 'Content-Type' => 'application/json' }
 response = Net::HTTP.post(uri, params.to_json, headers)
