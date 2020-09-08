@@ -1,1 +1,6 @@
 .env
+
+vendor/*
+!vendor/.keep
+
+.bundle/*
