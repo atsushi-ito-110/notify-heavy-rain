@@ -8,10 +8,9 @@ require 'net/http'
 require 'date'
 require 'dotenv'
 
-logger = Logger.new(STDOUT)
-Dotenv.load
-
 def lambda_handler(event:, context:)
+  logger = Logger.new(STDOUT)
+  Dotenv.load
   longitude = ARGV[0] || ENV['LONGITUDE']
   latitude  = ARGV[1] || ENV['LATITUDE']
   hash = Hash.from_xml(
