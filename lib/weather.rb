@@ -21,7 +21,7 @@ class Weather
       datetime = Time.parse(w[:Date])
 
       # TODO: dry run
-      # next if rate <= 1
+      next if rate <= 1
 
       heavy_rains << { rate: rate, rains_at: datetime }
     end
