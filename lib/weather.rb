@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+require './lib/logging'
+
 class Weather
+  include Logging
   def heavy_rains(longitude = ENV['LONGITUDE'], latitude = ENV['LATITUDE'])
-    logger = Logger.new($stdout)
     hash = Hash.from_xml(
       URI.open(
         "https://map.yahooapis.jp/weather/V1/place?coordinates=#{longitude},#{latitude}&appid=#{ENV['YAHOO_API_KEY']}"
@@ -21,7 +23,7 @@ class Weather
       datetime = Time.parse(w[:Date])
 
       # TODO: dry run
-      next if rate <= 1
+      # next if rate <= 3
 
       heavy_rains << { rate: rate, rains_at: datetime }
     end

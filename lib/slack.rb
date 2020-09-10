@@ -1,8 +1,22 @@
 # frozen_string_literal: true
 
+require './lib/logging'
+
 class Slack
-  def self.notify_rains(heavy_rains)
-    logger = Logger.new($stdout)
+  include Logging
+
+  attr_accessor :last_notified_at
+
+  def initialize
+    @last_notified_at = Time.now
+  end
+
+  def needs_notify?
+    logger.info(self.last_notified_at)
+    true
+  end
+
+  def notify_rains(heavy_rains)
     uri = URI.parse(ENV['SLACK_WEBHOOK_URL'])
     heavy_rain = heavy_rains.first
     message = "#{heavy_rain[:rains_at].strftime('%H:%M')}から雨が降るかも！\n降水量: #{heavy_rain[:rate]}"
@@ -16,5 +30,6 @@ class Slack
     headers = { 'Content-Type' => 'application/json' }
     response = Net::HTTP.post(uri, params.to_json, headers)
     logger.info("code: #{response.code}, body: #{response.body}")
+    response.code
   end
 end

@@ -1,22 +1,31 @@
 # frozen_string_literal: true
 
+require 'dotenv'
 require 'json'
 require 'active_support/all'
 require 'open-uri'
-require 'logger'
 require 'net/http'
 require 'date'
-require 'dotenv'
+require 'aws-sdk'
 
 require './lib/weather'
 require './lib/slack'
+require './lib/logging'
+
+include Logging
 
 def lambda_handler(event:, context:)
-  logger = Logger.new($stdout)
   Dotenv.load
 
   logger.info(event)
   logger.info(context)
+
+  # TODO: 最終通知時間などの判定
+  slack = Slack.new
+  unless slack.needs_notify?
+    logger.info("needs_notify? is false")
+    return
+  end
 
   weather = Weather.new
   heavy_rains = weather.heavy_rains
@@ -26,5 +35,5 @@ def lambda_handler(event:, context:)
     return
   end
 
-  Slack.notify_rains(heavy_rains)
+  slack.notify_rains(heavy_rains)
 end
