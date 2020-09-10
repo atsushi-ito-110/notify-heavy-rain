@@ -12,8 +12,11 @@ require './lib/weather'
 require './lib/slack'
 
 def lambda_handler(event:, context:)
-  logger = Logger.new(STDOUT)
+  logger = Logger.new($stdout)
   Dotenv.load
+
+  logger.info(event)
+  logger.info(context)
 
   weather = Weather.new
   heavy_rains = weather.heavy_rains
