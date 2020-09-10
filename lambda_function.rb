@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
-require 'dotenv'
-require 'json'
-require 'active_support/all'
-require 'open-uri'
-require 'net/http'
-require 'date'
-require 'aws-sdk'
+require './config/libs'
 
 require './lib/weather'
 require './lib/slack'
@@ -23,7 +17,7 @@ def lambda_handler(event:, context:)
   # TODO: 最終通知時間などの判定
   slack = Slack.new
   unless slack.needs_notify?
-    logger.info("needs_notify? is false")
+    logger.info('needs_notify? is false')
     return
   end
 

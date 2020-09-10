@@ -12,7 +12,7 @@ class Slack
   end
 
   def needs_notify?
-    logger.info(self.last_notified_at)
+    logger.info(last_notified_at)
     true
   end
 

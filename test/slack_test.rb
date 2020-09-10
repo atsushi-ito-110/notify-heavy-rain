@@ -1,6 +1,8 @@
-require 'test-unit'
-require 'dotenv'
+# frozen_string_literal: true
 
+require 'test-unit'
+
+require './config/libs'
 require './lib/slack'
 
 Dotenv.load
