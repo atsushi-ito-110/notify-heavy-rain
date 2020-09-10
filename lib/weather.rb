@@ -22,8 +22,7 @@ class Weather
       rate = w[:Rainfall].to_f
       datetime = Time.parse(w[:Date])
 
-      # TODO: dry run
-      next if rate <= 3
+      next if rate <= 3 && ENV['ENV'] != 'development'
 
       heavy_rains << { rate: rate, rains_at: datetime }
     end
