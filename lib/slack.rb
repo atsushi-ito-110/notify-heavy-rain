@@ -5,17 +5,6 @@ require './lib/logging'
 class Slack
   include Logging
 
-  attr_accessor :last_notified_at
-
-  def initialize
-    @last_notified_at = Time.now
-  end
-
-  def needs_notify?
-    logger.info(last_notified_at)
-    true
-  end
-
   def notify_rains(heavy_rains)
     uri = URI.parse(ENV['SLACK_WEBHOOK_URL'])
     heavy_rain = heavy_rains.first
