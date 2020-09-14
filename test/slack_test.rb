@@ -5,8 +5,6 @@ require 'test-unit'
 require './config/libs'
 require './lib/slack'
 
-Dotenv.load
-
 class TestSlack < Test::Unit::TestCase
   def test_last_notify
     slack = Slack.new

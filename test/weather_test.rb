@@ -5,8 +5,6 @@ require 'test-unit'
 require './config/libs'
 require './lib/weather'
 
-Dotenv.load
-
 class TestWeather < Test::Unit::TestCase
   def test_heavy_rains
     w = Weather.new
