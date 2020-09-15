@@ -1,0 +1,11 @@
+.env
+
+vendor/*
+!vendor/.keep
+
+.bundle/*
+
+versions/*
+!versions/.keep
+
+*.zip
