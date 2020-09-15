@@ -5,4 +5,7 @@ vendor/*
 
 .bundle/*
 
+versions/*
+!versions/.keep
+
 *.zip
