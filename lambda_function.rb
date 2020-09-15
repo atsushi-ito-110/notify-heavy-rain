@@ -1,30 +1,37 @@
 # frozen_string_literal: true
 
-require 'json'
-require 'active_support/all'
-require 'open-uri'
-require 'logger'
-require 'net/http'
-require 'date'
-require 'dotenv'
+require './config/libs'
 
-require './lib/weather'
-require './lib/slack'
+include Logging
 
 def lambda_handler(event:, context:)
-  logger = Logger.new($stdout)
-  Dotenv.load
-
   logger.info(event)
   logger.info(context)
 
   weather = Weather.new
-  heavy_rains = weather.heavy_rains
+  slack = Slack.new
+  Spot.all.each do |spot|
+    logger.info(spot)
+    # TODO: 最終通知時間などの判定
+    unless spot.last_notified_at.empty?
+      logger.info('needs_notify? is false')
+      next
+    end
 
-  if heavy_rains.empty?
-    logger.info('heavy_rains is empty')
-    return
+    heavy_rains = weather.heavy_rains(
+      longitude: spot.longitude,
+      latitude: spot.latitude,
+      spot_name: spot.name,
+    )
+
+    if heavy_rains.empty?
+      logger.info('heavy_rains is empty')
+      next
+    end
+
+    unless slack.notify_rains(heavy_rains) == '200'
+      logger.error('notify is failed')
+    end
   end
 
-  Slack.notify_rains(heavy_rains)
 end
