@@ -8,7 +8,11 @@ class Slack
   def notify_rains(heavy_rains)
     uri = URI.parse(ENV['SLACK_WEBHOOK_URL'])
     heavy_rain = heavy_rains.first
-    message = "#{heavy_rain[:rains_at].strftime('%H:%M')}から雨が降るかも！\n降水量: #{heavy_rain[:rate]}"
+    message = <<-EOS
+#{heavy_rain[:spot_name]} #{heavy_rain[:rains_at].strftime('%H:%M')}から雨が降るかも！
+降水量: #{heavy_rain[:rate]}
+    EOS
+    # message = "#{heavy_rain[:rains_at].strftime('%H:%M')}から雨が降るかも！\n降水量: #{heavy_rain[:rate]}"
     logger.info(message)
     params = {
       channel: "##{ENV['SLACK_CHANNEL']}",
