@@ -23,7 +23,7 @@ class Weather
       datetime = Time.parse(w[:Date])
 
       # TODO: test/developmentに関わらず挙動がちゃんとしている dry run的な
-      # next if rate <= 3
+      next if rate <= 3
 
       heavy_rains << {
         rate: rate,
