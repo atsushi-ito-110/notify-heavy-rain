@@ -8,6 +8,7 @@ class Spot
   attr_accessor :id, :name, :latitude, :longitude, :last_notified_at
 
   def initialize(item=nil)
+    # dynamodbからhashで返ってくるためインスタンス変数にぶちこむ
     item&.map do |key, value|
       instance_variable_set("@#{key.to_s}", value)
     end
