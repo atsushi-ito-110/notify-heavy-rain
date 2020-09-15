@@ -16,7 +16,7 @@ class Spot
 
   def self.all
     spots = []
-    resp = client.scan({ table_name: "dev-weather-spot" })
+    resp = client.scan({ table_name: ENV['WEATHER_SPOT_TABLE_NAME'] })
     resp.items.map do |item|
       Spot.new(item)
     end
