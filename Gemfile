@@ -11,3 +11,4 @@ end
 
 gem 'activesupport'
 gem 'dotenv'
+gem 'dynamoid'
