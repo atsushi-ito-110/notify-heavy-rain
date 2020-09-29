@@ -11,17 +11,19 @@ def lambda_handler(event:, context:)
   weather = Weather.new
   slack = Slack.new
   Spot.all.each do |spot|
+    # todo: attributesの中身を配列にして返してほしい感あるけどどーする？
+    spot = spot.attributes
     logger.info(spot)
     # TODO: 最終通知時間などの判定
-    unless spot.last_notified_at.empty?
-      logger.info('needs_notify? is false')
-      next
-    end
+    # unless spot[:last_notified_at].empty?
+    #   logger.info('needs_notify? is false')
+    #   next
+    # end
 
     heavy_rains = weather.heavy_rains(
-      longitude: spot.longitude,
-      latitude: spot.latitude,
-      spot_name: spot.name,
+      spot[:longitude],
+      spot[:latitude],
+      spot[:name],
     )
 
     if heavy_rains.empty?

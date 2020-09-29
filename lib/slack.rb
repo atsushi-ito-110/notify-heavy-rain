@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-require './lib/logging'
-
-class Slack
-  include Logging
+class Slack < Base
 
   def notify_rains(heavy_rains)
     uri = URI.parse(ENV['SLACK_WEBHOOK_URL'])
@@ -12,7 +9,6 @@ class Slack
 #{heavy_rain[:spot_name]} #{heavy_rain[:rains_at].strftime('%H:%M')}から雨が降るかも！
 降水量: #{heavy_rain[:rate]}
     EOS
-    # message = "#{heavy_rain[:rains_at].strftime('%H:%M')}から雨が降るかも！\n降水量: #{heavy_rain[:rate]}"
     logger.info(message)
     params = {
       channel: "##{ENV['SLACK_CHANNEL']}",
@@ -25,4 +21,5 @@ class Slack
     logger.info("code: #{response.code}, body: #{response.body}")
     response.code
   end
+
 end

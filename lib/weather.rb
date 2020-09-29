@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-require './lib/logging'
-
-class Weather
-  include Logging
-  def heavy_rains(longitude:, latitude:, spot_name:)
+class Weather < Base
+  def heavy_rains(longitude, latitude, spot_name)
+    logger.info("#{longitude}, #{latitude}, #{spot_name}")
     hash = Hash.from_xml(
       URI.open(
         "https://map.yahooapis.jp/weather/V1/place?coordinates=#{longitude},#{latitude}&appid=#{ENV['YAHOO_API_KEY']}"
